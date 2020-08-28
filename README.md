@@ -1,0 +1,2 @@
+# MyBCI
+Proyecto BCI
