@@ -16,7 +16,7 @@ def creatEventsArray(fp):
     events = np.zeros((len(true_labels) , 3), int)
     events[:, 0] = data_mrk_txt[:,0].astype(int)
     events[:, 2] = true_labels
-    return events, true_labels
+    return events
 
 
 def creatRawArray(fp):
