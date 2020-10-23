@@ -1,0 +1,66 @@
+Sujeto: aa
+[[30  7]
+ [ 6 13]]
+              precision    recall  f1-score   support
+
+          -1       0.83      0.81      0.82        37
+           0       0.65      0.68      0.67        19
+
+    accuracy                           0.77        56
+   macro avg       0.74      0.75      0.74        56
+weighted avg       0.77      0.77      0.77        56
+
+Sujeto: al
+[[25  0]
+ [ 2 29]]
+              precision    recall  f1-score   support
+
+          -1       0.93      1.00      0.96        25
+           0       1.00      0.94      0.97        31
+
+    accuracy                           0.96        56
+   macro avg       0.96      0.97      0.96        56
+weighted avg       0.97      0.96      0.96        56
+
+Sujeto: av
+[[21  6]
+ [12 17]]
+              precision    recall  f1-score   support
+
+          -1       0.64      0.78      0.70        27
+           0       0.74      0.59      0.65        29
+
+    accuracy                           0.68        56
+   macro avg       0.69      0.68      0.68        56
+weighted avg       0.69      0.68      0.68        56
+
+Sujeto: aw
+[[28  4]
+ [ 3 21]]
+              precision    recall  f1-score   support
+
+          -1       0.90      0.88      0.89        32
+           0       0.84      0.88      0.86        24
+
+    accuracy                           0.88        56
+   macro avg       0.87      0.88      0.87        56
+weighted avg       0.88      0.88      0.88        56
+
+Sujeto: ay
+[[34  2]
+ [ 0 20]]
+              precision    recall  f1-score   support
+
+          -1       1.00      0.94      0.97        36
+           0       0.91      1.00      0.95        20
+
+    accuracy                           0.96        56
+   macro avg       0.95      0.97      0.96        56
+weighted avg       0.97      0.96      0.96        56
+
+Acurracy - Sujeto aa: 0.7678571428571429
+Acurracy - Sujeto al: 0.9642857142857143
+Acurracy - Sujeto av: 0.6785714285714286
+Acurracy - Sujeto aw: 0.875
+Acurracy - Sujeto ay: 0.9642857142857143
+
