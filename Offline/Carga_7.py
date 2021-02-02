@@ -22,7 +22,8 @@ from mne.preprocessing import (create_eog_epochs, create_ecg_epochs,
 
 fp = {
       'aa' : {
-          'cnt': '../../DATA/Competencia BCI/III/Dataset_IV/txt/aa/100Hz/data_set_IVa_aa_cnt.txt',
+          #'cnt': '../../DATA/Competencia BCI/III/Dataset_IV/txt/aa/100Hz/data_set_IVa_aa_cnt.txt',
+          'cnt': '../../DATA/Competencia BCI/III/Dataset_IV/txt/aa/100Hz/data_set_IVa_aa_cnt.npy',
           'mrk': '../../DATA/Competencia BCI/III/Dataset_IV/txt/aa/100Hz/data_set_IVa_aa_mrk.txt',
           'lab': '../../DATA/Competencia BCI/III/Dataset_IV/txt/aa/TRUE_LABELS.txt',
           'chn': '../../DATA/Competencia BCI/III/Dataset_IV/txt/aa/100Hz/ch_names.txt',
@@ -30,7 +31,7 @@ fp = {
           'freq': 100
           },
        'al' : {
-          'cnt': '../../DATA/Competencia BCI/III/Dataset_IV/txt/al/100Hz/data_set_IVa_al_cnt.txt',
+          'cnt': '../../DATA/Competencia BCI/III/Dataset_IV/txt/al/100Hz/data_set_IVa_al_cnt.npy',
           'mrk': '../../DATA/Competencia BCI/III/Dataset_IV/txt/al/100Hz/data_set_IVa_al_mrk.txt',
           'lab': '../../DATA/Competencia BCI/III/Dataset_IV/txt/al/TRUE_LABELS.txt',
           'chn': '../../DATA/Competencia BCI/III/Dataset_IV/txt/al/100Hz/ch_names.txt',
@@ -38,7 +39,7 @@ fp = {
           'freq': 100
        },
        'av' : {
-          'cnt': '../../DATA/Competencia BCI/III/Dataset_IV/txt/av/100Hz/data_set_IVa_av_cnt.txt',
+          'cnt': '../../DATA/Competencia BCI/III/Dataset_IV/txt/av/100Hz/data_set_IVa_av_cnt.npy',
           'mrk': '../../DATA/Competencia BCI/III/Dataset_IV/txt/av/100Hz/data_set_IVa_av_mrk.txt',
           'lab': '../../DATA/Competencia BCI/III/Dataset_IV/txt/av/TRUE_LABELS.txt',
           'chn': '../../DATA/Competencia BCI/III/Dataset_IV/txt/av/100Hz/ch_names.txt',
@@ -46,7 +47,7 @@ fp = {
           'freq': 100
        },
        'aw' : {
-          'cnt': '../../DATA/Competencia BCI/III/Dataset_IV/txt/aw/100Hz/data_set_IVa_aw_cnt.txt',
+          'cnt': '../../DATA/Competencia BCI/III/Dataset_IV/txt/aw/100Hz/data_set_IVa_aw_cnt.npy',
           'mrk': '../../DATA/Competencia BCI/III/Dataset_IV/txt/aw/100Hz/data_set_IVa_aw_mrk.txt',
           'lab': '../../DATA/Competencia BCI/III/Dataset_IV/txt/aw/TRUE_LABELS.txt',
           'chn': '../../DATA/Competencia BCI/III/Dataset_IV/txt/aw/100Hz/ch_names.txt',
@@ -54,7 +55,7 @@ fp = {
           'freq': 100
           },
        'ay' : {
-          'cnt': '../../DATA/Competencia BCI/III/Dataset_IV/txt/ay/100Hz/data_set_IVa_ay_cnt.txt',
+          'cnt': '../../DATA/Competencia BCI/III/Dataset_IV/txt/ay/100Hz/data_set_IVa_ay_cnt.npy',
           'mrk': '../../DATA/Competencia BCI/III/Dataset_IV/txt/ay/100Hz/data_set_IVa_ay_mrk.txt',
           'lab': '../../DATA/Competencia BCI/III/Dataset_IV/txt/ay/TRUE_LABELS.txt',
           'chn': '../../DATA/Competencia BCI/III/Dataset_IV/txt/ay/100Hz/ch_names.txt',
@@ -84,6 +85,7 @@ for sujeto in fp:
     #print(raw['ch_names'])
     #Seleccionamos los canales a utilizar
     raw.pick_channels(['Fp1', 'Fp2', 'C3', 'C4','P7', 'P8', 'O1', 'O2'])
+    #print('raw select: ', raw.shape)
     
     #Seteamos la ubicacion de los canales segun el 
     montage = make_standard_montage('standard_1020')
@@ -94,6 +96,8 @@ for sujeto in fp:
     
     #Se carga eventos
     events = creatEventsArray(fp[sujeto])
+    print('dim eventos: ', events.shape)
+    print('eventos: ', events)
     
     #Se genera las epocas con los datos crudos y los eventos
     epochs = mne.Epochs(raw, events=events, event_id=event_id, tmin=tmin, tmax=tmax, baseline=None, preload=True, verbose=False)
@@ -103,6 +107,7 @@ for sujeto in fp:
     
     #Lo convierte a matriz numpy
     epochs_data = epochs.get_data()
+    print(epochs_data.shape )
     
     #Se crea set de de pruebas y test
     X_train, X_test, y_train, y_test = train_test_split(epochs_data, target, test_size=0.2, random_state=0)
