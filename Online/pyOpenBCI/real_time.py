@@ -15,7 +15,6 @@ from brainflow.board_shim import BoardShim, BrainFlowInputParams, LogLevels, Boa
 from brainflow.data_filter import DataFilter, FilterTypes, AggOperations
 
 
-
 class DataThread (threading.Thread):
     
     def __init__ (self, board, board_id):
@@ -47,8 +46,6 @@ class DataThread (threading.Thread):
                 totalData = np.append(totalData, data, axis=1)
         print(count, ': Data Shape ', totalData.shape, ' timestamp: ', datetime.fromtimestamp(totalData[22][0]) )
         np.save('data1.npy', totalData)
-        
-            
                 
     
 def main ():
@@ -63,7 +60,7 @@ def main ():
     board.prepare_session()
     board.start_stream()
     
-    data_thead = DataThread (board, board_id)
+    data_thead = DataThread(board, board_id)
     data_thead.start()
     try:
         time.sleep(60)

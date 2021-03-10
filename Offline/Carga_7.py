@@ -97,7 +97,8 @@ for sujeto in fp:
     #Se carga eventos
     events = creatEventsArray(fp[sujeto])
     print('dim eventos: ', events.shape)
-    print('eventos: ', events)
+    print(type(events))
+    #print('eventos: ', events)
     
     #Se genera las epocas con los datos crudos y los eventos
     epochs = mne.Epochs(raw, events=events, event_id=event_id, tmin=tmin, tmax=tmax, baseline=None, preload=True, verbose=False)

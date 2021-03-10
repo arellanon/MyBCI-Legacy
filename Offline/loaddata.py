@@ -35,6 +35,5 @@ def creatRawArray(fp):
         ch_names[i]=ch_names[i].strip()
     info = mne.create_info(ch_names, freq, 'eeg')
     print('dimensiones data_cnt: ', data_cnt.shape)
-        
     raw = mne.io.RawArray(data_cnt, info, first_samp=0, copy='auto', verbose=None)
     return raw
