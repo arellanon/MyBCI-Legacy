@@ -12,6 +12,8 @@ import threading
 import random
 import os
 from datetime import datetime
+from os import listdir
+from os.path import isfile, isdir
 
 
 from brainflow.board_shim import BoardShim, BrainFlowInputParams, LogLevels, BoardIds
@@ -20,16 +22,18 @@ from brainflow.data_filter import DataFilter, FilterTypes, AggOperations
 
 class DataThread (threading.Thread):
     
-    def __init__ (self, board, board_id):
+    def __init__ (self, board, board_id, path):
         threading.Thread.__init__ (self)
         self.eeg_channels = BoardShim.get_eeg_channels(board_id)
         self.sampling_rate = BoardShim.get_sampling_rate(board_id)
         self.keep_alive = True
         self.labels = None
         self.board = board
-        print("board_id: ", board_id)
-        print("sampling_rate: ", self.sampling_rate)
-        print("egg channels: ",self.eeg_channels)
+        self.path = path
+        print(path)
+        #print("board_id: ", board_id)
+        #print("sampling_rate: ", self.sampling_rate)
+        #print("egg channels: ",self.eeg_channels)
     
     def run (self):
         sleep_time = 1
@@ -69,11 +73,11 @@ class DataThread (threading.Thread):
         data = total_data[1:9, :].transpose()
         
         #Guardamos los datos crudos
-        np.save('DATA/data.npy', data)
-        np.save('DATA/events.npy', events)
-        np.save('DATA/total_data.npy', total_data)
-        np.save('DATA/lista_ts.npy', lista_ts)
-        np.save('DATA/labels.npy', labels)
+        np.save(self.path + '/data.npy', data)
+        np.save(self.path + '/events.npy', events)
+        np.save(self.path + '/total_data.npy', total_data)
+        np.save(self.path + '/lista_ts.npy', lista_ts)
+        np.save(self.path + '/labels.npy', labels)
         
         
 def test():
@@ -87,16 +91,16 @@ def test():
     duration = 1  # seconds
     freq = 440  # Hz pitido
     
-    stack = []
-    left  = [0] * (trial_per_run // 2)
-    rigth = [1] * (trial_per_run // 2)    
-    stack = left + rigth
-    print(stack)
-    random.shuffle(stack)
-    print(stack)
-    
     for i in range(run_n):
-        print('Corrida N#: ', run_n)
+        print('\nCorrida N#: ', i)
+        #Se crea lista de stack
+        stack = []
+        left  = [0] * (trial_per_run // 2)
+        rigth = [1] * (trial_per_run // 2)    
+        stack = left + rigth
+        print(stack)
+        random.shuffle(stack)
+        print(stack)
         for x in stack:
             time.sleep(time_pause)
             ts = time.time()
@@ -119,9 +123,38 @@ def test():
     labels=labels.transpose() #realizamos la traspuesta ts x event
     return labels
 
+def ls1(path):
+    lista = []
+    if os.path.exists(path) and os.path.isdir(path):
+        lista = [obj for obj in listdir(path) if isdir(path + obj)]
+    return lista
+
+def filtro(lista, inicial):
+    result=[]
+    for a in lista:
+        if a[:len(inicial)]==inicial:
+            result.append( int(a[1:]) )
+    return result
+
 def main ():
-    BoardShim.enable_board_logger()
+    #Inicializamos variables directorio
+    path_raiz='DATA/'
+    inicial='T'
+    name='T1'
     
+    #Calculamos directorio enumerado    
+    directorios = ls1(path_raiz)
+    #filtramos los directorios que empiezan con T
+    lista = filtro(directorios, inicial)
+    if lista:
+        num = max(lista) + 1
+        name = inicial + str(num)
+    path =path_raiz + name
+    #Creamos directorio
+    os.makedirs(path, exist_ok=True)
+    
+    BoardShim.enable_board_logger()
+
     params = BrainFlowInputParams ()
     params.serial_port = '/dev/ttyUSB0'
     board_id = BoardIds.CYTON_BOARD.value
@@ -130,7 +163,7 @@ def main ():
     board.prepare_session()
     board.start_stream()
     
-    data_thead = DataThread(board, board_id)
+    data_thead = DataThread(board, board_id, path)
     data_thead.start()
     try:
         #time.sleep(60)
