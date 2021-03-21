@@ -50,14 +50,14 @@ def loadDatos(cnt_file, events_file):
 
 def main():
     path_raiz = 'DATA/'
-    name = 'T7'
+    name = 'T10'
     path = path_raiz + name
     
     low_freq, high_freq = 7., 30.
-    tmin, tmax = 1., 2.
+    tmin, tmax = -1., 3.
     
     # event_id
-    event_id = {'right': 1, 'foot': 0}
+    event_id = {'right': 1, 'left': 0}
     
     acurracy = []
         
@@ -65,7 +65,8 @@ def main():
     raw, events = loadDatos(path + '/data.npy', path +'/events.npy')
     
     #Seleccionamos los canales a utilizar
-    raw.pick_channels(['Fp1', 'Fp2', 'C3', 'C4','P7', 'P8', 'O1', 'O2'])
+    #raw.pick_channels(['Fp1', 'Fp2', 'C3', 'C4','P7', 'P8', 'O1', 'O2'])
+    raw.pick_channels(['P3', 'P4', 'C3', 'C4','P7', 'P8', 'O1', 'O2'])
     #print('raw select: ', raw.shape)
     
     #Seteamos la ubicacion de los canales segun el 
@@ -83,11 +84,15 @@ def main():
     epochs = mne.Epochs(raw, events=events, event_id=event_id, tmin=tmin, tmax=tmax, baseline=None, preload=True, verbose=False)
     
     #Se carga target (convierte 1 -> -1 y 2 -> 0 )
-    target = epochs.events[:, -1] - 2
+    #target = epochs.events[:, -1] - 2
+    target = epochs.events[:, -1]
+    #print(epochs.events[:, -1])
+    print(target)
+    
     
     #Lo convierte a matriz numpy
     epochs_data = epochs.get_data()
-    #print(epochs_data.shape )
+    print(epochs_data.shape )
     
     #Se crea set de de pruebas y test
     X_train, X_test, y_train, y_test = train_test_split(epochs_data, target, test_size=0.2, random_state=0)
@@ -98,6 +103,8 @@ def main():
     np.save(path + '/X_test.npy', X_test)
     np.save(path + '/y_test.npy', y_test)
     
+    
+    """
     print(X_train.shape)
     print(y_train.shape)
     print(X_test.shape)
@@ -107,6 +114,7 @@ def main():
     print((y_train))
     print(type(X_test))
     print((y_test))
+    """
     
     #Clasificadores del modelo
     csp = CSP(n_components=2, reg=None, log=True, norm_trace=False)
@@ -122,7 +130,7 @@ def main():
     
     # plot CSP patterns estimated on full data for visualization
     csp.fit_transform(epochs_data, target)
-    #csp.plot_patterns(epochs.info, ch_type='eeg', size=1.5)
+    csp.plot_patterns(epochs.info, ch_type='eeg', size=1.5)
     
     #Resultados
     result=model.predict(X_test)
