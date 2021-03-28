@@ -24,13 +24,13 @@ import joblib
 ###
 path_raiz = 'DATA/'
 #datos
-name = 'T2'
+name = 'T10'
 #modelo
-name2 = 'T2'
+name_model = 'T10'
 #path datos
 path = path_raiz + name
 #path modelo
-path2 = path_raiz + name2
+path_model = path_raiz + name_model
 ###
 
 
@@ -38,8 +38,8 @@ path2 = path_raiz + name2
 ###
 ### DATOS CRUDOS
 ###
-total_data= np.load(path + '/total_data.npy')
-print('total_data: ',total_data.shape)
+#total_data= np.load(path + '/total_data.npy')
+#print('total_data: ',total_data.shape)
 
 data= np.load(path + '/data.npy')
 print('data: ',data.shape)
@@ -56,34 +56,39 @@ print('events: ', events.shape)
 #print(lista_ts[722])
 #print(labels[0][0])
 
+
+"""
 i=0
 for pos, x, lab in events:
     print(  datetime.fromtimestamp( labels[i][0]) , ' - ', datetime.fromtimestamp(lista_ts[pos]) , labels[i][1], '-', lab )
     i=i+1
-
+"""
 
 
 ###
 ### SET DE DATOS TRAIN & TEST
 ###
-X_train= np.load(path + '/X_train.npy')
-y_train= np.load(path + '/y_train.npy')
+#X_train= np.load(path + '/X_train.npy')
+#y_train= np.load(path + '/y_train.npy')
 X_test = np.load(path + '/X_test.npy')
 y_test = np.load(path + '/y_test.npy')
 
-print("x_train: ", X_train.shape)
-print("y_train: ",y_train.shape)
+#print("x_train: ", X_train.shape)
+#print("y_train: ",y_train.shape)
 print("X_test: ", X_test.shape)
+print("X_test: ", type( X_test[0][0][0]) )
 print("y_test: ",y_test.shape)
 
 #Cargamos modelo
-model = joblib.load(path2 + '/model.pkl')
+model = joblib.load(path_model + '/model.pkl')
 
 #score = model.score(X_train, y_train)
 #print("Score entrenamiento: ", score)
 
 #Resultados
 result=model.predict(X_test)
+print("y_test: ",y_test)
+print("result: ",result)
 
 #Variables report
 ts = time.time()

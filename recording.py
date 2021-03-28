@@ -14,6 +14,7 @@ import os
 from datetime import datetime
 from os import listdir
 from os.path import isfile, isdir
+from libb import *
 
 
 from brainflow.board_shim import BoardShim, BrainFlowInputParams, LogLevels, BoardIds
@@ -123,33 +124,14 @@ def test():
     labels=labels.transpose() #realizamos la traspuesta ts x event
     return labels
 
-def ls1(path):
-    lista = []
-    if os.path.exists(path) and os.path.isdir(path):
-        lista = [obj for obj in listdir(path) if isdir(path + obj)]
-    return lista
-
-def filtro(lista, inicial):
-    result=[]
-    for a in lista:
-        if a[:len(inicial)]==inicial:
-            result.append( int(a[1:]) )
-    return result
 
 def main ():
     #Inicializamos variables directorio
     path_raiz='DATA/'
-    inicial='T'
-    name='T1'
     
-    #Calculamos directorio enumerado    
-    directorios = ls1(path_raiz)
-    #filtramos los directorios que empiezan con T
-    lista = filtro(directorios, inicial)
-    if lista:
-        num = max(lista) + 1
-        name = inicial + str(num)
-    path =path_raiz + name
+    #Calculamos name del directorio nuevo.
+    name = new_name( path_raiz, 'T')
+    path = path_raiz + name
     #Creamos directorio
     os.makedirs(path, exist_ok=True)
     

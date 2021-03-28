@@ -50,11 +50,11 @@ def loadDatos(cnt_file, events_file):
 
 def main():
     path_raiz = 'DATA/'
-    name = 'T10'
+    name = 'T11'
     path = path_raiz + name
     
     low_freq, high_freq = 7., 30.
-    tmin, tmax = -1., 3.
+    tmin, tmax = 1., 2.
     
     # event_id
     event_id = {'right': 1, 'left': 0}
@@ -92,7 +92,7 @@ def main():
     
     #Lo convierte a matriz numpy
     epochs_data = epochs.get_data()
-    print(epochs_data.shape )
+    
     
     #Se crea set de de pruebas y test
     X_train, X_test, y_train, y_test = train_test_split(epochs_data, target, test_size=0.2, random_state=0)
@@ -121,16 +121,16 @@ def main():
     lda = LinearDiscriminantAnalysis()
     
     #Modelo utiliza CSP y LDA
-    model = Pipeline([('CSP', csp), ('LDA', lda)])
-    
+    model = Pipeline([('CSP', csp), ('LDA', lda)])    
+    print(epochs_data.shape )
     #Entrenamiento del modelo
     model.fit(X_train, y_train)
-    score = model.score(X_train, y_train)
-    print("Score entrenamiento: ", score)
     
+    score = model.score(X_train, y_train)    
+    print("Score entrenamiento: ", score)
     # plot CSP patterns estimated on full data for visualization
-    csp.fit_transform(epochs_data, target)
-    csp.plot_patterns(epochs.info, ch_type='eeg', size=1.5)
+    #csp.fit_transform(epochs_data, target)
+    #csp.plot_patterns(epochs.info, ch_type='eeg', size=1.5)
     
     #Resultados
     result=model.predict(X_test)
