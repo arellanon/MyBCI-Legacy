@@ -71,7 +71,7 @@ class DataThread (threading.Thread):
         events[:, 2] = labels[:,1].astype(int)
         
         #Seleccionamos los canales egg        
-        data = total_data[1:9, :].transpose()
+        data = total_data[1:9, :]
         
         #Guardamos los datos crudos
         np.save(self.path + '/data.npy', data)
@@ -126,10 +126,8 @@ def test():
 
 
 def main ():
-    #Inicializamos variables directorio
-    path_raiz='DATA/'
-    
     #Calculamos name del directorio nuevo.
+    path_raiz='DATA/'
     name = new_name( path_raiz, 'T')
     path = path_raiz + name
     #Creamos directorio

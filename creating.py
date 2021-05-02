@@ -25,7 +25,7 @@ import joblib
 
 path_raiz = 'DATA/'
 #datos
-lista = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7']
+lista = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T13']
 
 total_data=None
 total_lista_ts=None
@@ -44,7 +44,7 @@ for name in lista:
     if total_data is None:
         total_data = data                
     else:
-        total_data = np.append(total_data, data, axis=0)
+        total_data = np.append(total_data, data, axis=1)
         
     if total_lista_ts is None:
         total_lista_ts = lista_ts                
@@ -63,16 +63,20 @@ print('total_labels: ',total_labels.shape)
 
 
 posiciones = None
+i=0
 #Buscamos posicion del evento por proximidad ts
 for x in total_labels:
     resta = abs(total_lista_ts - x[0])
     pos = np.where(min(resta) == resta)[0]
+    print(i,': ', pos)
     if posiciones is None:
         posiciones = pos
     else:
         posiciones = np.append(posiciones, pos)
+    i=i+1
 
-print(posiciones)
+print(type(posiciones))
+print(posiciones.shape)
 #Con las posiciones creamos matriz de eventos pos x zero x event
 events = np.zeros((len(total_labels) , 3), int)
 events[:, 0] = posiciones.astype(int)

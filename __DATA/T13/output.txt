@@ -1,0 +1,12 @@
+2021-04-18 03:16:40.938787
+[[3 0]
+ [0 1]]
+              precision    recall  f1-score   support
+
+           0       1.00      1.00      1.00         3
+           1       1.00      1.00      1.00         1
+
+    accuracy                           1.00         4
+   macro avg       1.00      1.00      1.00         4
+weighted avg       1.00      1.00      1.00         4
+

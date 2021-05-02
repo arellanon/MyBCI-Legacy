@@ -46,3 +46,27 @@ weighted avg       1.00      1.00      1.00         4
    macro avg       0.67      0.67      0.50         4
 weighted avg       0.83      0.50      0.50         4
 
+2021-04-18 03:22:14.250719
+[[1 0]
+ [2 1]]
+              precision    recall  f1-score   support
+
+           0       0.33      1.00      0.50         1
+           1       1.00      0.33      0.50         3
+
+    accuracy                           0.50         4
+   macro avg       0.67      0.67      0.50         4
+weighted avg       0.83      0.50      0.50         4
+
+2021-04-18 03:22:56.855894
+[[1 0]
+ [2 1]]
+              precision    recall  f1-score   support
+
+           0       0.33      1.00      0.50         1
+           1       1.00      0.33      0.50         3
+
+    accuracy                           0.50         4
+   macro avg       0.67      0.67      0.50         4
+weighted avg       0.83      0.50      0.50         4
+

@@ -27,30 +27,12 @@ from mne.channels import make_standard_montage
 from mne.preprocessing import (create_eog_epochs, create_ecg_epochs,
                                compute_proj_ecg, compute_proj_eog)
 
+from libb import *
 
-def loadDatos(cnt_file, events_file):
-    #Seteamos frecuencia de muestreo Cyton
-    freq=250
-    #Se carga la matriz de datos
-    data_cnt= np.load(cnt_file)
-    data_cnt=data_cnt.transpose()
-    
-    #Se carga los nombre de los caneles
-    ch_names_txt = open('ch_names.txt', "r")
-    ch_names = ch_names_txt.read().split(',')
-    for i in range(len(ch_names)):
-        ch_names[i]=ch_names[i].strip()
-    info = mne.create_info(ch_names, freq, 'eeg')
-    raw = mne.io.RawArray(data_cnt, info, first_samp=0, copy='auto', verbose=None)
-    
-    #Se carga la matriz de eventos
-    events= np.load(events_file)
-
-    return raw, events
 
 def main():
     path_raiz = 'DATA/'
-    name = 'T11'
+    name = 'T10'
     path = path_raiz + name
     
     low_freq, high_freq = 7., 30.
@@ -62,12 +44,18 @@ def main():
     acurracy = []
         
     #Se carga set de datos crudos
-    raw, events = loadDatos(path + '/data.npy', path +'/events.npy')
+    data = np.load(path + '/data.npy')
+    #data = data.transpose()
+    print("data: ", data.shape)
+    
+    #Se carga la matriz de eventos
+    events= np.load(path +'/events.npy')
+
+    #Data Señal
+    raw = loadDatos(data, 'ch_names.txt')
     
     #Seleccionamos los canales a utilizar
-    #raw.pick_channels(['Fp1', 'Fp2', 'C3', 'C4','P7', 'P8', 'O1', 'O2'])
     raw.pick_channels(['P3', 'P4', 'C3', 'C4','P7', 'P8', 'O1', 'O2'])
-    #print('raw select: ', raw.shape)
     
     #Seteamos la ubicacion de los canales segun el 
     montage = make_standard_montage('standard_1020')
@@ -75,11 +63,7 @@ def main():
     
     # Se aplica filtros band-pass
     raw.filter(low_freq, high_freq, fir_design='firwin', skip_by_annotation='edge')
-    
-    #Se carga eventos   
-    #events = creatEventsArray(fp[sujeto])
-    #events= np.load('DATA/events.npy')
-    
+        
     #Se genera las epocas con los datos crudos y los eventos
     epochs = mne.Epochs(raw, events=events, event_id=event_id, tmin=tmin, tmax=tmax, baseline=None, preload=True, verbose=False)
     
@@ -89,10 +73,8 @@ def main():
     #print(epochs.events[:, -1])
     print(target)
     
-    
     #Lo convierte a matriz numpy
     epochs_data = epochs.get_data()
-    
     
     #Se crea set de de pruebas y test
     X_train, X_test, y_train, y_test = train_test_split(epochs_data, target, test_size=0.2, random_state=0)
@@ -126,7 +108,7 @@ def main():
     #Entrenamiento del modelo
     model.fit(X_train, y_train)
     
-    score = model.score(X_train, y_train)    
+    score = model.score(X_train, y_train)
     print("Score entrenamiento: ", score)
     # plot CSP patterns estimated on full data for visualization
     #csp.fit_transform(epochs_data, target)

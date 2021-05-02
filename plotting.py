@@ -34,6 +34,7 @@ def loadDatos(cnt_file, events_file):
     #Se carga la matriz de datos
     data_cnt= np.load(cnt_file)
     data_cnt=data_cnt.transpose()
+    print(data_cnt.shape )
     print('min: ', np.amin( data_cnt ) )
     print('max: ', np.amax( data_cnt ) )
     print('media: ', np.mean( data_cnt ) )
@@ -51,6 +52,7 @@ def loadDatos(cnt_file, events_file):
     events= np.load(events_file)
     print(data_cnt.shape)
     print(events.shape)
+    print(events)
 
     return raw, events
 
@@ -78,7 +80,8 @@ def main():
     montage = make_standard_montage('standard_1020')
     raw.set_montage(montage)
     
-    #raw.plot(scalings='auto', n_channels=1, duration=20)
+    #raw.plot(scalings='auto', n_channels=8, duration=20)
+    raw.plot(scalings='auto', n_channels=8, events=events)
     # Se aplica filtros band-pass
     raw.filter(low_freq, high_freq, fir_design='firwin', skip_by_annotation='edge')
     
