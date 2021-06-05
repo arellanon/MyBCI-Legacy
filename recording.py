@@ -135,7 +135,7 @@ def main ():
     
     BoardShim.enable_board_logger()
 
-    params = BrainFlowInputParams ()
+    params = BrainFlowInputParams()
     params.serial_port = '/dev/ttyUSB0'
     board_id = BoardIds.CYTON_BOARD.value
     

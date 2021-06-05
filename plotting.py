@@ -27,7 +27,9 @@ from mne.channels import make_standard_montage
 from mne.preprocessing import (create_eog_epochs, create_ecg_epochs,
                                compute_proj_ecg, compute_proj_eog)
 
+from libb import *
 
+"""
 def loadDatos(cnt_file, events_file):
     #Seteamos frecuencia de muestreo Cyton
     freq=250
@@ -55,6 +57,7 @@ def loadDatos(cnt_file, events_file):
     print(events)
 
     return raw, events
+"""
 
 def main():
     path_raiz = 'DATA/'
@@ -70,7 +73,19 @@ def main():
     acurracy = []
         
     #Se carga set de datos crudos
-    raw, events = loadDatos(path + '/data.npy', path +'/events.npy')
+    #raw, events = loadDatos(path + '/data.npy', path +'/events.npy')
+    
+    #Se carga set de datos crudos
+    data = np.load(path + '/data.npy')
+    #data = data.transpose()
+    print("data: ", data.shape)
+    
+    #Se carga la matriz de eventos
+    events= np.load(path +'/events.npy')
+
+    #Data Señal
+    raw = loadDatos(data, 'ch_names.txt')
+    
     
     #Seleccionamos los canales a utilizar
     raw.pick_channels(['P3', 'P4', 'C3', 'C4','P7', 'P8', 'O1', 'O2'])
@@ -81,7 +96,7 @@ def main():
     raw.set_montage(montage)
     
     #raw.plot(scalings='auto', n_channels=8, duration=20)
-    raw.plot(scalings='auto', n_channels=8, events=events)
+    raw.plot(scalings='auto', n_channels=1, events=events)
     # Se aplica filtros band-pass
     raw.filter(low_freq, high_freq, fir_design='firwin', skip_by_annotation='edge')
     
@@ -95,13 +110,13 @@ def main():
     #events= np.load('DATA/events.npy')
     
     #Se genera las epocas con los datos crudos y los eventos
-    epochs = mne.Epochs(raw, events=events, event_id=event_id, tmin=tmin, tmax=tmax, baseline=None, preload=True, verbose=False)
+    #epochs = mne.Epochs(raw, events=events, event_id=event_id, tmin=tmin, tmax=tmax, baseline=None, preload=True, verbose=False)
     
     #Se carga target (convierte 1 -> -1 y 2 -> 0 )
-    target = epochs.events[:, -1] - 2
+    #target = epochs.events[:, -1] - 2
     
     #Lo convierte a matriz numpy
-    epochs_data = epochs.get_data()
+    #epochs_data = epochs.get_data()
     #print(epochs_data.shape )
     
     #Se crea set de de pruebas y test

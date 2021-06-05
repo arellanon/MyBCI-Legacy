@@ -54,7 +54,7 @@ def loadDatos(data_cnt, ch_name_file):
     freq=250
     #Se carga la matriz de datos
     #data_cnt=data_cnt.transpose()
-    print("data_cnt: ", data_cnt.shape)
+    #print("data_cnt: ", data_cnt.shape)
     
     #Se carga los nombre de los caneles
     ch_names_txt = open(ch_name_file, "r")

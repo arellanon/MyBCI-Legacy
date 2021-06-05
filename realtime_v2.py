@@ -55,7 +55,10 @@ class DataThread (threading.Thread):
             time.sleep(sleep_time)
             #data = self.board.get_board_data()
             #me guardo 3 seg.
-            data = self.board.get_current_board_data(753)            
+            data = self.board.get_current_board_data(251)
+            c = self.board.get_board_data_count()
+            print("dim: ", data.shape, "cant: ", c)
+            """
             if len(data[0]) == 753:
                 #timestamp
                 ts=data[22][0]
@@ -90,7 +93,8 @@ class DataThread (threading.Thread):
                     total_data = data                
                 else:
                     total_data = np.append(total_data, data, axis=0)
-        print(count, ': Data Shape ', total_data.shape, ' timestamp: ', datetime.fromtimestamp(ts) )
+            """
+        #print(count, ': Data Shape ', total_data.shape, ' timestamp: ', datetime.fromtimestamp(ts) )
         print(self.path)
         np.save(self.path + '/data.npy', data)
         np.save(self.path + '/data_input.npy', total_data)
