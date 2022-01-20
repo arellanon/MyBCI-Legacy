@@ -32,11 +32,12 @@ from libb import *
 
 def main():
     path_raiz = 'DATA/'
-    name = 'T10'
+    name = 'T21'
     path = path_raiz + name
     
     low_freq, high_freq = 7., 30.
-    tmin, tmax = 1., 2.
+    tmin, tmax = 1, 2
+#    tmin, tmax = 2, 4
     
     # event_id
     event_id = {'right': 1, 'left': 0}

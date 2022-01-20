@@ -82,10 +82,12 @@ class DataThread (threading.Thread):
         
         
 def test():
-    run_n = 2
-    trial_per_run = 10
-    time_trial = 7
-    time_pause = 3
+    run_n = 1
+    trial_per_run = 40
+    time_trial = 4
+    time_fixation = 3
+    time_pause = 4
+    time_pause_per_run = 20
     labels=None
     
     #variables para sonido beep
@@ -101,9 +103,16 @@ def test():
         stack = left + rigth
         print(stack)
         random.shuffle(stack)
-        print(stack)
+        #print(stack)
+        #time pause per run
+        time.sleep(time_pause_per_run)
         for x in stack:
-            time.sleep(time_pause)
+            #time fixation
+            for j in range(time_fixation):
+                print('.', end="")
+                time.sleep(1)
+            #time beep
+            os.system('play -nq -t alsa synth {} sine {}'.format(duration, freq)) #beep
             ts = time.time()
             print()
             print(x, ' ', ts, ' - ', datetime.fromtimestamp(ts))
@@ -112,14 +121,14 @@ def test():
                 labels = label
             else:
                 labels = np.append(labels, label, axis=1)
-                
-            os.system('play -nq -t alsa synth {} sine {}'.format(duration, freq)) #beep
+            
             for j in range(time_trial):
                 if x == 0:
-                    print('<', end="")
+                    print('+', end="")
                 else:
                     print('>', end="")
                 time.sleep(1)
+            time.sleep(time_pause)
     
     labels=labels.transpose() #realizamos la traspuesta ts x event
     return labels
